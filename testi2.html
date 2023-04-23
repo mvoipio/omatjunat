@@ -1,0 +1,59 @@
+<HTML>
+
+    <head>
+      <title>AJAX - Junadatan hakeminen - osa 2</title>
+      <meta charset="utf-8">
+      <link rel="stylesheet" href="css/teststyles.css">
+    </head>
+    
+    <script src="js/testscript.js">
+    
+    </script>
+    
+    
+    
+    
+    <h1>Noudetun tiedon fiksaaminen</h1>
+    
+
+    <h2>Ensimmäinen vaihe: hae oikeanlainen raakadata</h2>
+
+    <p>Nappi hakee raakadatan, jotta voin käyttää sitä vertailuun.
+    </p>
+    <button onclick=" loadJSONDoc()">Lataa Tikkurilan raakadata</button>
+    </p>
+    
+    <div id="rawdata">Raakadata tähän.</div>
+
+    <p>Tämä osoittautui tärkeäksi tiedoksi: "<em>Kaikki aikaleimat ovat ISO-8601:n mukaisia (esimerkiksi 2018-03-28T04:35:00.000Z). Huomaa, että aikaleimoissa aikavyökkeenä on Z eli ne ovat UTC-aikaa, eivät Suomen aikaa.</em>"<br>
+    Eli jos käy niin, että näytän ajat lopullisissa tuloksissa, pitää vääntää ne kaikki Suomen aikaan (UTC+3).</p>
+
+    
+    <h2>Toinen vaihe: saadun datan siivoaminen</h2>
+
+    <p>Nappi hakee saman datan kuin yllä, mutta siivoaa sen sitten ja pulauttaa taulukkona sivulle.
+      <button onclick="loadJSONDocClean()">Hae Tikkurilan tiedot</button>
+    </p>
+
+    <table id="prettydata">
+    </table>
+
+    <p>Tässä on open esimerkeissä jokin ongelma:
+      <pre>var data = jsonObj;<br>console.log(data.products);</pre><br>
+      Konsoli paljastaa, että jsonObj näyttää ihan järkevältä, nyt se pitää vain saada tuupattua taulukoksi. Ei kun googlaamaan...</p>
+
+
+    <h2>Ennen toista vaihetta: Datan valinta</h2>
+
+      <p><button onclick="loadSelected()">Load train number</button></p>
+
+      <div id="selected">Selected data goes here.</div>
+
+
+    <p>&nbsp;</p>
+    
+    <br>
+    
+    </body>
+    
+    </html>

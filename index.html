@@ -1,0 +1,110 @@
+<head>
+    <title>Junatietoa Digitrafficista</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/junat.css">
+  </head>
+  
+  <script src="js/skripti.js">
+  
+  </script>
+
+
+<h1>Seuraavat 10 Tikkurilasta lähtevää lähijunaa</h1>
+
+
+<button onclick=" loadJSONRaw()">Raakadata</button>
+
+<button onclick=" loadTrainsWithParse()">Hae junat</button>
+
+
+<div id="junadata"></div>
+ 
+<h2>Miksi näin vaatimaton?</h2>
+
+<p>Käyttämäni data tulee digitrafficista, ohje on sivulla <a target="_blank" href="https://www.digitraffic.fi/rautatieliikenne/#liikennepaikan-saapuvat-ja-l%C3%A4htev%C3%A4t-junat-lukum%C3%A4%C3%A4r%C3%A4rajoitus">
+    Liikennepaikan saapuvat ja lähtevät junat (lukumäärärajoitus)</a> ja käytin JSONin poimimiseen melkein suoraan kolmatta esimerkkiä, vaihdoin vain 
+    asemakoodiksi Tikkurilan koodin TKL. Näin jälkikäteen ajatellen <a target="_blank" href="https://www.digitraffic.fi/rautatieliikenne/#reittiperusteinen-haku">reittiperusteinen haku</a>
+    välille TKL-HKI olisi voinut olla järkevämpi. Siinä tosin olisi sitten taas ollut se ongelma, että olisi
+    jotenkin pitänyt suodattaa kaikki kaukojunat pois, kun ei niihin pääse HSL-lipulla.
+</p>
+
+<p>Löin päätäni seinään digitrafficin JSONin kanssa aika monta päivä ennen kuin ymmärsin, miksi mitkään esimerkit ja ohjeet
+    eivät toimineet. Kyse ei ollutkaan minusta vaan datan muodosta. Kun ymmärtää, mitä JSONissa
+    pitäisi lukea selviää sekin, miksi ei oikein toimi: JSONin sisällöstä puuttuu matriisien nimiä. Se alkaa suoraan näin:</p>
+    <img src="img/vr_json.png">
+
+<p>Niin että viittaapa siihen sitten ja sen sisällä oleviin taulukoihin... Ymmärtääkseni koko ongelman alkusyyn jouduin
+    itse asiassa palaamaan harjoitukseen 8.2 ja sen malliratkaisuun.
+    Vasta kun kävin vertailemassa <a target="_blank" href="https://dummyjson.com/products">Dummyjsonin JSONia</a>
+    ja <a target="_blank" href="https://rata.digitraffic.fi/api/v1/live-trains/station/TKL?arrived_trains=0&arriving_trains=10&departed_trains=0&departing_trains=0&include_nonstopping=false&train_categories=Commuter">Digitrafficin JSONia</a>,
+    ymmärsin kunnolla, miksi en osaa soveltaa saamiani ja löytämiäni ohjeita jälkimmäiseen.</p>
+    
+<p>Lopulta löysin
+    JavaScript-hilavitkuttimen nimeltä <a href="https://stackoverflow.com/questions/19098797/fastest-way-to-flatten-un-flatten-nested-javascript-objects">Flattener</a>,
+    joka tekee jsonista yksitasoisen ja numeroi tarvittaessa nimettömät matriisit. Hetki piti ihmetellä
+    sitäkin, miten sen saa toimimaan, mutta siitä selvittiin tunnin pähkäilyllä. Lopputuloksena
+    on sitten vähän toisenlainen JavaScript-objekti:
+</p>
+    <img src="img/vr_json_flattened.PNG">
+
+<p>Tähän rakenteeseen pystyi sitten suhteellisen helposti rakentamaan loopin, jolla saa haettua junien numerot.
+    Yritin myös virittää loopin sisään if - else if - else-rakenteen, joka olisi lisännyt junan numeron
+    perään sen määränpään, mutta en saanut sitä toimimaan. Tällä kertaa ei auttanut herra Googlekaan,
+    varmaan kyseessä on joku ihan yksinkertainen juttu, jota en vielä ymmärrä joko if-rakenteista tai
+    loopeista (tai kummastakaan).
+</p>
+
+<p>Halusin kuitenkin näyttää, että teorian tasolla ymmärrän, miten JSON-tiedostosta saa poimittua
+    tietoa ja tehtyä siitä HTML-sivun. Matkan varrella opin mm, että jos viittaaminen olisi onnistunut
+    nimillä, olisin voinut käyttää .filteriä Tikkurilan tietojen kaivamiseen listasta. Lopullisen
+    määränpään olisi saanut pyytämällä tietyn matriisin viimeistä riviä, tosin se olisi I- ja P-junien
+    osalta vähän epäkätevää, kun ne molemmat menevät Helsinkiin, toinen päärataa ja toinen lentokentän kautta.
+</p>
+
+<p>Täytyy myös tunnustaa, että ainakin puoli päivää meni sen keksimiseen, mitä ylipäänsä digitrafficilta sain.
+    JSONissa on ihan oikein se mitä tilattiinkin eli seuraavat kymmenen Tikkurilaan tulevaa lähijunaa.
+    Ne tulevat junanumeron mukaan, ei aikajärjestyksessä, ja listauksessa on ihan <em>kaikki</em> asemat,
+    joilla juna käy, sekä saapumis- että lähtöajat näiltä asemilta. Yhden kiemuran aiheutti sekin, että aikaleimat
+    ovat UTC-aikaa eli näin kesäaikaan niihin pitää lisätä kolme tuntia ja talviaikaan kaksi tuntia... 
+    On kuitenkin ihan mahdollista, että herra Googlella olisi ollut tähän ongelmaan ohjeita, jos niin
+    pitkälle olisin koskaan päässyt.
+</p>
+
+
+<h2>Mahdollinen tapa saada lähtöajat Tikkurilasta litatusta objektista</h2>
+
+<p>Junan aikataulun mukainen lähtöaika Tikkurilasta on kohdassa n.timeTableRows.p.scheduledTime, kun
+    n.timeTableRows.p.stationShortCode on "TKL" <em>ja</em> n.timeTableRows.p. ja n.timeTableRows.p.type on
+    "DEPARTURE". n on 0-9 (koska junia tulee aina kymmenen), mutta p voi olla välillä 0-61.<br/>
+    p on kuitenkin samalla linjalla aina sama, koska ne tekevät aina saman määrän saapumisia ja lähtöjä,
+    joten tämän voisi ehkä ratkaista niinkin päin, että ensin tarkistaisi junan kirjaimen ja
+    sitten määrittäisi p:n arvon if-else if-else -lausekkeella ja vasta sen jälkeen tekisi jonkinlaisen
+    loopin tai looppeja. Tähän ei kuitenkaan aika ja taidot riittäneet.
+    <br />
+    <em>Jos</em> VR:n datassa olisi matriiseilla ja alimatriiseilla kaikilla kunnon nimet, olisi
+    tiedon onkiminen sisäkkäisistä matriiseista suhteellisen helppoa ihan pistenotaatiolla. Nyt 
+    kompastuin vielä siihenkin, että flatTimes.0.commuterLineID ei toimi, koska siinä on numero (näin luin
+    myöhemmin), mutta flatTimes[0.commuterLineID] toimii. Aika monen parametrin testaamista sekin
+    kyllä vaati, mutta viiden päivän ähräyksen jälkeen oli hienoa saada ylipäänsä ulos ylipäänsä joku tieto...
+</p>
+
+<h2>Loppusanat</h2>
+
+<p>Opin oikeasti matkan varrella aika paljon JSONista ja sen käsittelystä, mutta kun lähdetieto
+    ei ollut ihan helpointa, niin lopputuloksessa ei ole paljon näytettävää. Uskon kuitenkin,
+    että jos saisin sellaista JSONia kuin DummyJSONilla on tarjolla, saisin varsin vähällä vaivalla
+    kirjoitettua siitä kaikenlaisia palveluita. Nyt vain suuret suunnitelmat eivät toteutuneet eikä
+    tästä tullut sitä palvelua, jota itselleni haaveilin ihan käyttöön: Että näkisin nopeasti
+    esimerkiksi seuraavat Tikkurilasta päärataa Helsinkiin menevät junat. Tietääkseni sellaista
+    palvelua ei ole ja se olisi minulle hyvin tarpeellinen. Mutta ehkä joku päivä osaan ratkaista
+    tämän ongelman. Tai sitten opettelen käyttämään sitä toista vaihtoehtoa eli GraphQL-rajapintaa,
+    mutta sitä ei voinut tämän kurssin puitteissa käyttää.
+</p>
+
+<p>&nbsp;</p>
+
+<br>
+
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+/* Very, very basic css, VR color and font a bit like theirs */
+
+body {
+    font-family: "Arial", Helvetica, sans-serif;
+  }
+
+  h1 {
+    height: 60px;
+    color: #00B451;
+  }
+
+  h2 {
+    margin-top: 50px;
+  }
+
+  table,
+  tr,
+  td {
+    margin: 10px;
+    padding: 5px;
+    border: 2px solid;
+    border-collapse: collapse;
+  }
+
+  
