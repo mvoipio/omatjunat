@@ -78,26 +78,10 @@ function loadTrainsWithParse() {
            // Then realized that I wouldn't need an array
           var out = "<table>";
            let lineID = '';
-//           var destination = '';
            for (var i = 0; i < 10; i++) {
            lineID = (flatTimes[i + '.commuterLineID']); // dot notation doesn't work with numbers, have to be brackets
-           //IF chain for destinations does not work properly
-/*           if (lineID = "K"){
-                destination = "Kerava";
-            } else if (lineID = "P"){
-                destination = "Helsinki";
-            } else if (lineID = "I"){
-                destination = "Lentoasema";
-            } else if (lineID = "Z"){
-                destination = "Lahti";
-            } else if (lineID = "R"){
-                destination = "Riihimäki (Hämeenlinna / Tampere) ";
-            } else {
-                destination = "Ei tiedossa / Tuntematon";
-            }; */
             out += '<tr>';
             out += '<td>' + lineID + '</td>'; // line letter
-//            out += '<td>' + destination + '</td>'; // final destination
             out += '</tr>';
         }
         // After all the data has been set, we will output closing tag for the table

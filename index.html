@@ -48,10 +48,9 @@
     <img src="img/vr_json_flattened.PNG">
 
 <p>Tähän rakenteeseen pystyi sitten suhteellisen helposti rakentamaan loopin, jolla saa haettua junien numerot.
-    Yritin myös virittää loopin sisään if - else if - else-rakenteen, joka olisi lisännyt junan numeron
-    perään sen määränpään, mutta en saanut sitä toimimaan. Tällä kertaa ei auttanut herra Googlekaan,
-    varmaan kyseessä on joku ihan yksinkertainen juttu, jota en vielä ymmärrä joko if-rakenteista tai
-    loopeista (tai kummastakaan).
+    Sen sijaan pidemmälle taitoni eivät riittäneet, kun Tikkurilan tiedot ovat eri junilla eri kohdissa
+    litistetyssä tiedostossa ja olisi pitänyt loopin lisäksi ehkä rakentaa jonkinlaisia if-rakenteita
+    ("jos se on K-juna ja se lähti Helsingistä, katso Tikkurilan lähtöaika riviltä n.jotakin.jotakin.jotakin").
 </p>
 
 <p>Halusin kuitenkin näyttää, että teorian tasolla ymmärrän, miten JSON-tiedostosta saa poimittua
@@ -98,7 +97,25 @@
     esimerkiksi seuraavat Tikkurilasta päärataa Helsinkiin menevät junat. Tietääkseni sellaista
     palvelua ei ole ja se olisi minulle hyvin tarpeellinen. Mutta ehkä joku päivä osaan ratkaista
     tämän ongelman. Tai sitten opettelen käyttämään sitä toista vaihtoehtoa eli GraphQL-rajapintaa,
-    mutta sitä ei voinut tämän kurssin puitteissa käyttää.
+    mutta sitä ei voinut tämän kurssin puitteissa käyttää.</p>
+    
+<p>Tiedon tulostaminen html-muotoon ja sivun muotoilu ovat tässä ne helpot asiat, todellinen haaste
+    on se, että tiedon ensin saa järkevästi ulos noudetusta listasta. En tarvitse mitään visuaalisesti
+    kovin hienoa enkä aio sellaista rakentaa, mutta jos olisin onnistunut tiedon hakemisessa, olisin
+    rakentanut jotain vähän hienompaa. Esimerkiksi minulla voisi olla alasvetovalikko, jossa on
+    "Tikkurilasta Helsinkiin", "Tikkurilasta Keravalle" (käytän tätä joskus Korsoon ja Keravaan),
+    "Helsingistä Tikkurilaan" ja "Pasilasta Tikkurilaan", niin siinähän olisi kaikki meikäläisen
+    tarpeet katettuna. Tai vain neljä nappia, se olisi vielä nopeampi käyttää kuin alasvetovalikko.
+    Tämä käyttöliittymäsuunnittelu on kuitenkin edessä vasta sitten, kun saan sisään oikeasti
+    sellaista dataa kuin haluan.
+</p>
+
+
+<h2>Jälkikirjoitus</h2>
+
+<p>Virallisen jättöpäivän jälkeisellä luennolla katsoimme jQueryä. Täytyy tutkia, löytyykö siitä
+    ratkaisu ongelmaan, on aina mahdollista, että sitä kautta saa uusia työkaluja. Jos saisin
+    palvelun toimimaan, minulla olisi oikeasti sille käyttöä!
 </p>
 
 <p>&nbsp;</p>
